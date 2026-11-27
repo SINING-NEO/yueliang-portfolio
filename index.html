@@ -103,32 +103,69 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 .resume-menu a{display:block;padding:10px 12px;text-decoration:none}
 .resume-menu a:hover{background:var(--hover-fill);color:var(--hover-ink)}
 
-.vinyl{position:relative;border-radius:50%;aspect-ratio:1;will-change:transform;
+.disc{position:relative;aspect-ratio:1;width:100%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.disc:active{cursor:grabbing}
+.disc-shadow{position:absolute;left:8%;right:8%;bottom:-3%;height:10%;border-radius:50%;background:radial-gradient(ellipse at center, rgba(0,0,0,.28), transparent 70%);filter:blur(8px);pointer-events:none;z-index:0}
+.disc-body{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;overflow:hidden;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.18),
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    inset 0 -10px 28px rgba(80,10,40,.18),
+    inset 0 14px 30px rgba(255,255,255,.12);
   background:
-    radial-gradient(circle at 50% 38%, rgba(255,255,255,.55), transparent 26%),
-    radial-gradient(circle at 50% 50%, #f7f7f7 0 1.15%, #111 1.2% 1.7%, #2a2a2a 1.7% 13.2%, #0e0e0e 13.2% 15.4%, transparent 15.5%),
-    repeating-radial-gradient(circle at 50% 50%, var(--vinyl-a) 0 1px, var(--vinyl-b) 1px 2px, var(--vinyl-c) 2px 3px, var(--vinyl-d) 3px 4.2px);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35), inset 0 -24px 40px rgba(150,20,70,.12);
-  transition:transform .45s cubic-bezier(.2,.7,.2,1), filter .35s;
+    radial-gradient(circle at 50% 50%, transparent 15.2%, rgba(0,0,0,.22) 15.3% 15.9%, transparent 16%),
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.18), transparent 42%),
+    radial-gradient(circle at 70% 72%, rgba(40,0,20,.18), transparent 46%),
+    linear-gradient(145deg, var(--vinyl-a), var(--vinyl-c) 48%, var(--vinyl-b));
+  transform-origin:50% 50%;
+  will-change:transform;
 }
-.vinyl:hover{filter:brightness(1.04)}
-.vinyl .sheen{position:absolute;inset:0;border-radius:50%;background:linear-gradient(118deg, rgba(255,255,255,.5), transparent 34% 62%, rgba(255,255,255,.22));mix-blend-mode:soft-light;pointer-events:none}
-.vinyl .mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-62%);color:#f3f3f3;font-size:.72rem;letter-spacing:.28em;font-weight:600;pointer-events:none}
+.disc-grooves{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;pointer-events:none;opacity:.92;mix-blend-mode:multiply}
+html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
+.disc-edge{position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28), inset 0 0 0 4px rgba(0,0,0,.08);
+  background:radial-gradient(circle at 50% 50%, transparent 96.5%, rgba(0,0,0,.28) 97.5% 100%);
+}
+.disc-specular{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:3;
+  background:
+    conic-gradient(from 210deg at 50% 50%,
+      transparent 0deg 28deg,
+      rgba(255,255,255,.08) 34deg,
+      rgba(255,255,255,.55) 48deg,
+      rgba(255,255,255,.12) 58deg,
+      transparent 70deg 200deg,
+      rgba(255,255,255,.06) 220deg,
+      transparent 250deg 360deg);
+  mix-blend-mode:screen;opacity:.85;
+}
+.disc-label{position:absolute;left:50%;top:50%;width:28%;height:28%;transform:translate(-50%,-50%);border-radius:50%;z-index:2;pointer-events:none;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.14), transparent 55%),
+    radial-gradient(circle at 50% 50%, #2a2a2a, #111 70%, #050505);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), 0 0 0 1px rgba(0,0,0,.35);
+  color:#f4f1ec;display:grid;place-items:center;text-align:center;padding:8%;
+}
+.disc-label b{display:block;font-size:clamp(.42rem,1.15vw,.7rem);letter-spacing:.22em;font-weight:650;line-height:1.15}
+.disc-label small{display:block;margin-top:.35em;font-size:clamp(.32rem,.85vw,.52rem);letter-spacing:.16em;opacity:.7;text-transform:uppercase}
+.disc-hole{position:absolute;left:50%;top:50%;width:3.2%;height:3.2%;transform:translate(-50%,-50%);border-radius:50%;z-index:4;pointer-events:none;
+  background:radial-gradient(circle at 40% 35%, #d8d8d8, #8a8a8a 40%, #1a1a1a 70%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35), 0 0 0 1px rgba(0,0,0,.5), 0 1px 2px rgba(0,0,0,.35);
+}
+.disc-hint{position:absolute;left:50%;bottom:-1.8rem;transform:translateX(-50%);font-size:.72rem;letter-spacing:.08em;color:var(--muted);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .3s}
+.disc.is-live .disc-hint{opacity:.7}
+.cover .disc-hint{bottom:auto;top:-1.6rem}
 
 .cover{position:relative;min-height:100vh;overflow:hidden;background:var(--paper)}
 .cover-slot{position:absolute;left:50%;top:30vh;width:min(1600px,136vw);transform:translateX(-50%);z-index:0}
-.cover-slot .vinyl{width:100%;animation:spin 110s linear infinite}
-.cover-slot .vinyl.is-held{animation-play-state:paused}
-@keyframes spin{to{transform:rotate(360deg)}}
-.cover-copy{position:relative;z-index:1;min-height:100vh;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:calc(var(--nav) + 24px) clamp(18px,6vw,80px) 14vh}
+.cover-copy{position:relative;z-index:1;min-height:100vh;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:calc(var(--nav) + 24px) clamp(18px,6vw,80px) 14vh;pointer-events:none}
 .cover-copy h1{margin:0;font-size:clamp(2.8rem,7.2vw,6.6rem);font-weight:750;letter-spacing:-.055em;line-height:.92;text-wrap:balance;text-shadow:0 0 24px var(--readable)}
-.cover-copy .side{align-self:flex-end;margin-bottom:.35em;font-size:clamp(1.4rem,3vw,2.6rem);font-weight:700;letter-spacing:-.04em;text-decoration:none;transition:transform .25s}
+.cover-copy .side{pointer-events:auto;align-self:flex-end;margin-bottom:.35em;font-size:clamp(1.4rem,3vw,2.6rem);font-weight:700;letter-spacing:-.04em;text-decoration:none;transition:transform .25s}
 .cover-copy .side:hover{text-decoration:underline;text-underline-offset:6px;transform:translateY(-2px)}
 
 .about{position:relative;padding:clamp(72px,10vh,120px) clamp(18px,4vw,48px) 40px;scroll-margin-top:var(--nav);background:var(--paper)}
 .index,.thanks,.catbreak,.case{scroll-margin-top:calc(var(--nav) + 8px)}
 .about-layout{position:relative;max-width:1180px;margin:0 auto;min-height:1080px}
-.about-layout > .vinyl{width:min(760px,70vw);margin:30px auto}
+.about-layout > .disc{width:min(760px,70vw);margin:30px auto}
 .who{position:absolute;left:0;top:48px;width:min(400px,36vw);z-index:2}
 .polaroid{background:var(--panel);padding:9px 9px 34px;width:210px;box-shadow:var(--shadow);transform:rotate(-7deg);border:1px solid var(--line);transition:transform .35s ease, box-shadow .35s ease}
 .polaroid:hover{transform:rotate(-2deg) translateY(-6px) scale(1.03);box-shadow:0 24px 48px rgba(0,0,0,.22)}
@@ -150,7 +187,7 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 
 .index{padding:20px clamp(18px,5vw,72px) 80px;background:var(--paper)}
 .toc-stage{position:relative;max-width:980px;margin:0 auto 20px;min-height:640px}
-.toc-stage .vinyl{width:min(560px,70vw);margin:80px auto 0}
+.toc-stage .disc{width:min(560px,70vw);margin:80px auto 0}
 .toc-title{position:absolute;left:50%;top:18px;transform:translateX(-50%);margin:0;text-align:center;font-size:clamp(3rem,7vw,6.2rem);font-weight:750;letter-spacing:-.055em;line-height:.86;z-index:2;width:min(640px,90vw);text-shadow:0 0 18px var(--readable)}
 .orbit{position:absolute;z-index:2;text-decoration:none;font-weight:650;font-size:clamp(1.1rem,2vw,1.55rem);letter-spacing:-.03em;max-width:11em;padding:8px 10px;background:var(--readable);border:1px solid transparent;transition:transform .25s,border-color .25s,background .25s}
 .orbit span{display:block;font-weight:500;font-size:.78rem;letter-spacing:.08em;margin-bottom:2px;color:var(--muted)}
@@ -233,19 +270,20 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 .nextline a:first-child:hover{transform:translateX(-2px)}
 
 .thanks{position:relative;min-height:92vh;overflow:hidden;background:var(--paper);padding-top:72px}
-.thanks-copy{position:relative;z-index:2;padding:8vh clamp(18px,6vw,80px) 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;max-width:1100px}
+.thanks-copy{position:relative;z-index:2;padding:8vh clamp(18px,6vw,80px) 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;max-width:1100px;pointer-events:none}
+.thanks-copy a,.thanks-copy button,.thanks-copy .textbtn{pointer-events:auto}
 .thanks-copy h3{margin:0 0 8px;font-size:.95rem}
 .thanks-copy p,.thanks-copy a{margin:0 0 6px;display:block;text-decoration:none;font-size:.98rem;color:var(--muted)}
 .thanks-copy a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .textbtn{background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
 .thanks h2{position:relative;z-index:2;margin:6vh 0 0;text-align:center;font-size:clamp(5rem,16vw,12rem);pointer-events:none;text-shadow:0 0 20px var(--readable)}
 .thanks-slot{position:absolute;left:50%;top:52%;width:min(1280px,120vw);transform:translateX(-50%)}
-.thanks-slot .vinyl{width:100%}
+.thanks-slot .disc{width:100%}
 .fine{position:relative;z-index:2;text-align:center;margin:18px 0 0;font-size:.8rem;color:var(--muted)}
 
 @media (max-width:980px){
   .about-layout{min-height:0}
-  .about-layout > .vinyl{width:min(420px,78vw);margin:0 auto 10px}
+  .about-layout > .disc{width:min(420px,78vw);margin:0 auto 10px}
   .who,.sheet{position:static;width:auto}
   .sheet{margin-top:28px}
   .who{padding-top:8px}
@@ -274,14 +312,15 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
   .orbit{position:static;display:block;text-align:left;margin:8px 0}
   .o2,.o2:hover{transform:none}
   .toc-stage{min-height:0;display:flex;flex-direction:column;align-items:flex-start}
-  .toc-stage .vinyl{order:-1;width:min(280px,70vw);margin:10px auto 16px}
+  .toc-stage .disc{order:-1;width:min(280px,70vw);margin:10px auto 16px}
+  .disc-hint{display:none}
   .toc-title{position:static;transform:none;width:auto;text-align:left}
   .thanks-copy{grid-template-columns:1fr}
   .polaroid{width:180px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .cover-slot .vinyl,.case,.polaroid,.figs img,.orbit,.nextline a{animation:none;transition:none}
+  .case,.polaroid,.figs img,.orbit,.nextline a{animation:none;transition:none}
   .case{opacity:1;transform:none}
 }
 @media (prefers-contrast:more){
@@ -322,7 +361,19 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 
 <main>
 <section class="cover" id="top" aria-label="Welcome">
-  <div class="cover-slot" aria-hidden="true"><div class="vinyl"><span class="sheen"></span><span class="mark">YL</span></div></div>
+  <div class="cover-slot" aria-hidden="true">
+    <div class="disc" data-disc="cover" data-idle="33">
+      <div class="disc-shadow"></div>
+      <div class="disc-body">
+        <canvas class="disc-grooves" width="800" height="800"></canvas>
+        <div class="disc-edge"></div>
+        <div class="disc-label"><b>YUE LIANG</b><small>YL · 33⅓</small></div>
+        <div class="disc-hole"></div>
+        <div class="disc-specular"></div>
+      </div>
+      <span class="disc-hint">drag to spin</span>
+    </div>
+  </div>
   <div class="cover-copy">
     <h1>welcome to<br>my portfolio</h1>
     <a class="side" href="#about">about me</a>
@@ -331,7 +382,16 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 
 <section class="about" id="about" aria-labelledby="hello">
   <div class="about-layout">
-    <div class="vinyl" aria-hidden="true"><span class="sheen"></span><span class="mark">YL</span></div>
+    <div class="disc" data-disc="about" data-idle="0" aria-hidden="true">
+      <div class="disc-shadow"></div>
+      <div class="disc-body">
+        <canvas class="disc-grooves" width="800" height="800"></canvas>
+        <div class="disc-edge"></div>
+        <div class="disc-label"><b>ABOUT</b><small>side A</small></div>
+        <div class="disc-hole"></div>
+        <div class="disc-specular"></div>
+      </div>
+    </div>
     <div class="who">
       <figure class="polaroid">
         <img src="assets/me.jpg" alt="Yue Liang on a rooftop with the Singapore skyline at night" width="720" height="900">
@@ -376,7 +436,16 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 <section class="index" id="index" aria-labelledby="toc-title">
   <div class="toc-stage">
     <h2 class="toc-title" id="toc-title">table of<br>content</h2>
-    <div class="vinyl" aria-hidden="true"><span class="sheen"></span><span class="mark">YL</span></div>
+    <div class="disc" data-disc="index" data-idle="0" aria-hidden="true">
+      <div class="disc-shadow"></div>
+      <div class="disc-body">
+        <canvas class="disc-grooves" width="800" height="800"></canvas>
+        <div class="disc-edge"></div>
+        <div class="disc-label"><b>INDEX</b><small>side B</small></div>
+        <div class="disc-hole"></div>
+        <div class="disc-specular"></div>
+      </div>
+    </div>
     <a class="orbit o1" href="#cat-data"><span>01</span>data</a>
     <a class="orbit o2" href="#cat-ai"><span>02</span>machine learning</a>
     <a class="orbit o3" href="#cat-web"><span>03</span>web</a>
@@ -411,7 +480,18 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
   </div>
   <h2 class="script" id="thanks">Thank you</h2>
   <p class="fine">© 2026 Yue Liang (Thawdar Lin Wai) · Singapore Polytechnic</p>
-  <div class="thanks-slot" aria-hidden="true"><div class="vinyl"><span class="sheen"></span><span class="mark">YL</span></div></div>
+  <div class="thanks-slot" aria-hidden="true">
+    <div class="disc" data-disc="thanks" data-idle="12">
+      <div class="disc-shadow"></div>
+      <div class="disc-body">
+        <canvas class="disc-grooves" width="800" height="800"></canvas>
+        <div class="disc-edge"></div>
+        <div class="disc-label"><b>THANK YOU</b><small>encore</small></div>
+        <div class="disc-hole"></div>
+        <div class="disc-specular"></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -658,31 +738,162 @@ if(!reduce){
   } else cases.forEach(c => c.classList.add('in'));
 } else document.querySelectorAll('.case').forEach(c => c.classList.add('in'));
 
-const coverVinyl = document.querySelector('.cover-slot .vinyl');
-if(coverVinyl && fine && !reduce){
-  coverVinyl.addEventListener('pointerenter', () => coverVinyl.classList.add('is-held'));
-  coverVinyl.addEventListener('pointerleave', () => {
-    coverVinyl.classList.remove('is-held');
-    coverVinyl.style.transform = '';
-  });
-  coverVinyl.addEventListener('pointermove', e => {
-    const r = coverVinyl.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
-    coverVinyl.style.transform = `rotateX(${(-y*8).toFixed(2)}deg) rotateY(${(x*10).toFixed(2)}deg)`;
-  });
+/* ---- Realistic disc grooves + angular physics ---- */
+function paintGrooves(canvas){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const size = 800;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cx = size / 2, cy = size / 2;
+  ctx.clearRect(0, 0, size, size);
+  // dense concentric grooves (vinyl micro-texture)
+  for(let r = size * 0.162; r < size * 0.492; r += 1.15){
+    const t = (r - size * 0.162) / (size * 0.33);
+    const alpha = 0.045 + Math.sin(r * 0.55) * 0.02 + t * 0.03;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(40,8,22,${alpha.toFixed(3)})`;
+    ctx.lineWidth = (r % 3.45 < 1.2) ? 0.9 : 0.45;
+    ctx.stroke();
+  }
+  // lighter highlight rings
+  for(let r = size * 0.17; r < size * 0.49; r += 4.6){
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+  }
+  // run-out / lead-in band near label
+  ctx.beginPath();
+  ctx.arc(cx, cy, size * 0.155, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
 }
 
-document.querySelectorAll('.about-layout > .vinyl, .toc-stage .vinyl, .thanks-slot .vinyl').forEach(v => {
-  if(!fine || reduce) return;
-  v.addEventListener('pointermove', e => {
-    const r = v.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
-    v.style.transform = `rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*8).toFixed(2)}deg) scale(1.02)`;
+function angleOf(el, x, y){
+  const r = el.getBoundingClientRect();
+  return Math.atan2(y - (r.top + r.height / 2), x - (r.left + r.width / 2));
+}
+
+function bootDiscs(){
+  const discs = [...document.querySelectorAll('.disc')];
+  discs.forEach(root => {
+    const canvas = root.querySelector('.disc-grooves');
+    if(canvas) paintGrooves(canvas);
   });
-  v.addEventListener('pointerleave', () => { v.style.transform = ''; });
-});
+  if(reduce){
+    discs.forEach(root => {
+      const body = root.querySelector('.disc-body');
+      body.style.transform = 'rotate(-12deg)';
+    });
+    return;
+  }
+
+  // Physical model per disc:
+  // θ angle (rad), ω angular velocity (rad/s)
+  // I = 0.5 m r^2  (uniform disc), m=1 in normalized units
+  // drag torque τ = κ * Δθ/Δt while grabbing
+  // free motion: I α = -b ω - c sgn(ω) ω^2   (viscous + quadratic air drag)
+  // cover/thanks also get a gentle motor toward idle RPM
+  const TWO_PI = Math.PI * 2;
+  const systems = discs.map(root => {
+    const body = root.querySelector('.disc-body');
+    const specular = root.querySelector('.disc-specular');
+    const idleRpm = parseFloat(root.dataset.idle || '0');
+    const idle = idleRpm * TWO_PI / 60; // rad/s
+    const mass = 1;
+    const radius = 1;
+    const I = 0.5 * mass * radius * radius;
+    return {
+      root, body, specular,
+      theta: Math.random() * TWO_PI,
+      omega: idle * 0.35,
+      idle,
+      I,
+      b: 0.55,          // viscous friction
+      c: 0.08,          // quadratic drag
+      motor: idle ? 1.8 : 0,
+      grabbing: false,
+      lastAngle: 0,
+      lastT: 0,
+      samples: []
+    };
+  });
+
+  let last = performance.now();
+  const step = now => {
+    let dt = (now - last) / 1000;
+    last = now;
+    if(dt > 0.05) dt = 0.05;
+    systems.forEach(s => {
+      if(!s.grabbing){
+        // motor toward idle speed: τ_m = k (ω_idle - ω)
+        const tauMotor = s.motor * (s.idle - s.omega);
+        const tauVisc = -s.b * s.omega;
+        const tauAir = -s.c * s.omega * Math.abs(s.omega);
+        const alpha = (tauMotor + tauVisc + tauAir) / s.I;
+        s.omega += alpha * dt;
+        if(Math.abs(s.omega) < 0.002 && !s.idle) s.omega = 0;
+      }
+      s.theta += s.omega * dt;
+      s.body.style.transform = `rotate(${s.theta}rad)`;
+      // world-locked specular: counter-rotate so light streak stays put
+      if(s.specular) s.specular.style.transform = `rotate(${-s.theta}rad)`;
+    });
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+
+  systems.forEach(s => {
+    const onDown = e => {
+      if(e.button !== undefined && e.button !== 0) return;
+      s.grabbing = true;
+      s.root.classList.add('is-live');
+      s.root.setPointerCapture?.(e.pointerId);
+      s.lastAngle = angleOf(s.root, e.clientX, e.clientY);
+      s.lastT = performance.now();
+      s.samples = [];
+      s.omega = 0;
+    };
+    const onMove = e => {
+      if(!s.grabbing) return;
+      const a = angleOf(s.root, e.clientX, e.clientY);
+      let d = a - s.lastAngle;
+      while(d > Math.PI) d -= TWO_PI;
+      while(d < -Math.PI) d += TWO_PI;
+      const t = performance.now();
+      const dt = Math.max((t - s.lastT) / 1000, 0.001);
+      s.theta += d;
+      const w = d / dt;
+      s.samples.push(w);
+      if(s.samples.length > 5) s.samples.shift();
+      s.omega = s.samples.reduce((p,q)=>p+q,0) / s.samples.length;
+      s.lastAngle = a;
+      s.lastT = t;
+      s.body.style.transform = `rotate(${s.theta}rad)`;
+      if(s.specular) s.specular.style.transform = `rotate(${-s.theta}rad)`;
+    };
+    const onUp = () => {
+      if(!s.grabbing) return;
+      s.grabbing = false;
+      // clamp fling speed (~ 3 revolutions/sec max)
+      const max = TWO_PI * 3;
+      if(s.omega > max) s.omega = max;
+      if(s.omega < -max) s.omega = -max;
+      setTimeout(() => { if(!s.grabbing) s.root.classList.remove('is-live'); }, 900);
+    };
+    s.root.addEventListener('pointerdown', onDown);
+    s.root.addEventListener('pointermove', onMove);
+    s.root.addEventListener('pointerup', onUp);
+    s.root.addEventListener('pointercancel', onUp);
+    s.root.addEventListener('lostpointercapture', onUp);
+  });
+}
+bootDiscs();
 })();
 </script>
 </body>
