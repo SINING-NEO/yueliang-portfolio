@@ -64,10 +64,10 @@ button,input{font:inherit;color:inherit}
 .vinyl .mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-62%);color:#f3f3f3;font-size:.72rem;letter-spacing:.28em;font-weight:600;pointer-events:none}
 
 .cover{position:relative;min-height:100vh;overflow:hidden;background:#fff}
-.cover-slot{position:absolute;left:50%;top:42vh;width:min(1500px,128vw);transform:translateX(-50%);z-index:0}
+.cover-slot{position:absolute;left:50%;top:30vh;width:min(1600px,136vw);transform:translateX(-50%);z-index:0}
 .cover-slot .vinyl{width:100%;animation:spin 110s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.cover-copy{position:relative;z-index:1;min-height:100vh;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:calc(var(--nav) + 24px) clamp(18px,6vw,80px) 16vh}
+.cover-copy{position:relative;z-index:1;min-height:100vh;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:calc(var(--nav) + 24px) clamp(18px,6vw,80px) 14vh}
 .cover-copy h1{margin:0;font-size:clamp(3.1rem,7.2vw,6.6rem);font-weight:750;letter-spacing:-.055em;line-height:.9}
 .cover-copy .side{align-self:flex-end;margin-bottom:.35em;font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;letter-spacing:-.04em;text-decoration:none}
 .cover-copy .side:hover{text-decoration:underline;text-underline-offset:6px}
@@ -76,9 +76,10 @@ button,input{font:inherit;color:inherit}
 .index,.thanks,.catbreak,.case{scroll-margin-top:calc(var(--nav) + 8px)}
 .about-layout{position:relative;max-width:1180px;margin:0 auto;min-height:1080px}
 .about-layout > .vinyl{width:min(760px,70vw);margin:30px auto}
-.who{position:absolute;left:0;top:70px;width:min(340px,34vw);z-index:2}
+.who{position:absolute;left:0;top:48px;width:min(400px,36vw);z-index:2}
 .polaroid{background:#fff;padding:9px 9px 34px;width:210px;box-shadow:0 16px 36px rgba(0,0,0,.16);transform:rotate(-7deg)}
-.polaroid img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.polaroid img{width:100%;height:250px;object-fit:cover}
+.dashi img{height:148px}
 .polaroid figcaption{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:.82rem}
 .polaroid{position:relative}
 .hello{font-size:clamp(4.6rem,8vw,7.2rem);margin:.15em 0 .05em;position:relative;z-index:2}
