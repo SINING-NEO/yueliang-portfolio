@@ -106,7 +106,7 @@ html[data-theme="dark"] .theme-btn .moon{display:block}
 .disc{position:relative;aspect-ratio:1;width:100%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .disc:active{cursor:grabbing}
 .disc-shadow{position:absolute;left:8%;right:8%;bottom:-3%;height:10%;border-radius:50%;background:radial-gradient(ellipse at center, rgba(0,0,0,.28), transparent 70%);filter:blur(8px);pointer-events:none;z-index:0}
-.disc-body{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;overflow:hidden;
+.disc-body{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;overflow:hidden;will-change:transform;transform:translateZ(0);
   box-shadow:
     0 18px 40px rgba(0,0,0,.18),
     inset 0 0 0 1px rgba(255,255,255,.22),
@@ -416,7 +416,7 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
 
 <section class="about" id="about" aria-labelledby="hello">
   <div class="about-layout">
-    <div class="disc" data-disc="about" data-idle="0" aria-hidden="true">
+    <div class="disc" data-disc="about" data-idle="28" aria-hidden="true">
       <div class="disc-shadow"></div>
       <div class="disc-body">
         <canvas class="disc-grooves" width="800" height="800"></canvas>
@@ -470,7 +470,7 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
 <section class="index" id="index" aria-labelledby="toc-title">
   <div class="toc-stage">
     <h2 class="toc-title" id="toc-title">table of<br>content</h2>
-    <div class="disc" data-disc="index" data-idle="0" aria-hidden="true">
+    <div class="disc" data-disc="index" data-idle="22" aria-hidden="true">
       <div class="disc-shadow"></div>
       <div class="disc-body">
         <canvas class="disc-grooves" width="800" height="800"></canvas>
@@ -533,7 +533,7 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
     <div class="thanks-stage">
       <div class="thanks-glow" aria-hidden="true"></div>
       <div class="thanks-slot" aria-hidden="true">
-        <div class="disc" data-disc="thanks" data-idle="8">
+        <div class="disc" data-disc="thanks" data-idle="18">
           <div class="disc-shadow"></div>
           <div class="disc-body">
             <canvas class="disc-grooves" width="800" height="800"></canvas>
@@ -551,9 +551,29 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
   </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
 (() => {
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const navOffset = () => (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav')) || 64) + 8;
+let lenis = null;
+if(!reduce && typeof Lenis === 'function'){
+  lenis = new Lenis({
+    duration: 1.15,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 0.92,
+    touchMultiplier: 1.35,
+    syncTouch: false
+  });
+  document.documentElement.style.scrollBehavior = 'auto';
+}
+const scrollToEl = (el, extra = 0) => {
+  if(!el) return;
+  const offset = -(navOffset() + extra);
+  if(lenis) lenis.scrollTo(el, { offset, duration: 1.15 });
+  else el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+};
 const fine = matchMedia('(pointer: fine)').matches;
 const GH = 'https://github.com/yueliangg/';
 const CAT = {data:['01','data','Data analytics'], ai:['02','machine learning','Machine learning'], web:['03','web','Web']};
@@ -767,7 +787,7 @@ cases.addEventListener('click', e => {
   if(next){
     e.preventDefault();
     openCase(next.dataset.open);
-    document.getElementById('p-'+next.dataset.open)?.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
+    scrollToEl(document.getElementById('p-'+next.dataset.open));
     return;
   }
   const btn = e.target.closest('.case-summary');
@@ -795,6 +815,24 @@ const fromHash = () => {
 addEventListener('hashchange', fromHash);
 fromHash();
 
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if(!a || a.hasAttribute('data-open') || a.classList.contains('orbit')) return;
+  const href = a.getAttribute('href');
+  if(!href || href === '#') return;
+  const id = href.slice(1);
+  const el = document.getElementById(id);
+  if(!el) return;
+  e.preventDefault();
+  const caseMatch = id.match(/^p-([a-z]+)$/);
+  if(caseMatch){
+    el.hidden = false;
+    openCase(caseMatch[1], false);
+  }
+  scrollToEl(el);
+  history.pushState(null, '', href);
+});
+
 // orbit category links still work via #cat-* — map to filters
 document.querySelectorAll('.orbit').forEach(a => a.addEventListener('click', e => {
   const href = a.getAttribute('href') || '';
@@ -804,7 +842,7 @@ document.querySelectorAll('.orbit').forEach(a => a.addEventListener('click', e =
   e.preventDefault();
   const btn = document.querySelector(`.filters [data-filter="${f}"]`);
   btn?.click();
-  document.getElementById('work')?.scrollIntoView({behavior: reduce?'auto':'smooth'});
+  scrollToEl(document.getElementById('work'));
 }));
 
 const root = document.documentElement;
@@ -824,12 +862,20 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
 
 const nav = document.getElementById('nav');
 const progress = document.getElementById('progress');
+let scrollQueued = false;
 const onScroll = () => {
-  nav.classList.toggle('scrolled', scrollY > 8);
-  const max = document.documentElement.scrollHeight - innerHeight;
-  progress.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + '%';
+  if(scrollQueued) return;
+  scrollQueued = true;
+  requestAnimationFrame(() => {
+    scrollQueued = false;
+    const y = lenis ? lenis.scroll : scrollY;
+    nav.classList.toggle('scrolled', y > 8);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+  });
 };
 addEventListener('scroll', onScroll, {passive:true});
+if(lenis) lenis.on('scroll', onScroll);
 onScroll();
 
 const toggle = document.getElementById('navToggle');
@@ -918,20 +964,23 @@ function bootDiscs(){
       const body = root.querySelector('.disc-body');
       body.style.transform = 'rotate(-12deg)';
     });
+    if(lenis){
+      const idle = t => { lenis.raf(t); requestAnimationFrame(idle); };
+      requestAnimationFrame(idle);
+    }
     return;
   }
 
   // Physical model per disc:
   // θ angle (rad), ω angular velocity (rad/s)
   // I = 0.5 m r^2  (uniform disc), m=1 in normalized units
-  // drag torque τ = κ * Δθ/Δt while grabbing
-  // free motion: I α = -b ω - c sgn(ω) ω^2   (viscous + quadratic air drag)
-  // cover/thanks also get a gentle motor toward idle RPM
+  // free motion: I α = τ_motor - b ω - c sgn(ω) ω^2
+  // every disc motors toward its idle RPM; off-screen discs pause for scroll smoothness
   const TWO_PI = Math.PI * 2;
   const systems = discs.map(root => {
     const body = root.querySelector('.disc-body');
     const specular = root.querySelector('.disc-specular');
-    const idleRpm = parseFloat(root.dataset.idle || '0');
+    const idleRpm = Math.max(12, parseFloat(root.dataset.idle || '24'));
     const idle = idleRpm * TWO_PI / 60; // rad/s
     const mass = 1;
     const radius = 1;
@@ -939,12 +988,13 @@ function bootDiscs(){
     return {
       root, body, specular,
       theta: Math.random() * TWO_PI,
-      omega: idle * 0.35,
+      omega: idle * 0.55,
       idle,
       I,
-      b: 0.55,          // viscous friction
-      c: 0.08,          // quadratic drag
-      motor: idle ? 1.8 : 0,
+      b: 0.42,
+      c: 0.06,
+      motor: 2.4,
+      visible: true,
       grabbing: false,
       lastAngle: 0,
       lastT: 0,
@@ -952,24 +1002,33 @@ function bootDiscs(){
     };
   });
 
+  if('IntersectionObserver' in window){
+    const vio = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        const s = systems.find(x => x.root === en.target);
+        if(s) s.visible = en.isIntersecting;
+      });
+    }, {rootMargin: '12% 0px'});
+    systems.forEach(s => vio.observe(s.root));
+  }
+
   let last = performance.now();
   const step = now => {
+    if(lenis) lenis.raf(now);
     let dt = (now - last) / 1000;
     last = now;
     if(dt > 0.05) dt = 0.05;
     systems.forEach(s => {
+      if(!s.visible && !s.grabbing) return;
       if(!s.grabbing){
-        // motor toward idle speed: τ_m = k (ω_idle - ω)
         const tauMotor = s.motor * (s.idle - s.omega);
         const tauVisc = -s.b * s.omega;
         const tauAir = -s.c * s.omega * Math.abs(s.omega);
         const alpha = (tauMotor + tauVisc + tauAir) / s.I;
         s.omega += alpha * dt;
-        if(Math.abs(s.omega) < 0.002 && !s.idle) s.omega = 0;
       }
       s.theta += s.omega * dt;
       s.body.style.transform = `rotate(${s.theta}rad)`;
-      // world-locked specular: counter-rotate so light streak stays put
       if(s.specular) s.specular.style.transform = `rotate(${-s.theta}rad)`;
     });
     requestAnimationFrame(step);
@@ -1008,7 +1067,6 @@ function bootDiscs(){
     const onUp = () => {
       if(!s.grabbing) return;
       s.grabbing = false;
-      // clamp fling speed (~ 3 revolutions/sec max)
       const max = TWO_PI * 3;
       if(s.omega > max) s.omega = max;
       if(s.omega < -max) s.omega = -max;
