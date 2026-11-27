@@ -276,17 +276,30 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
 .figs-mini img{width:100%;border:1px solid var(--line)}
 .figs-mini figcaption{font-size:.75rem;color:var(--muted);margin-top:4px}
 
-.thanks{position:relative;min-height:92vh;overflow:hidden;background:var(--paper);padding-top:72px}
-.thanks-copy{position:relative;z-index:2;padding:8vh clamp(18px,6vw,80px) 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;max-width:1100px;pointer-events:none}
-.thanks-copy a,.thanks-copy button,.thanks-copy .textbtn{pointer-events:auto}
-.thanks-copy h3{margin:0 0 8px;font-size:.95rem}
-.thanks-copy p,.thanks-copy a{margin:0 0 6px;display:block;text-decoration:none;font-size:.98rem;color:var(--muted)}
-.thanks-copy a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-.textbtn{background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
-.thanks h2{position:relative;z-index:2;margin:6vh 0 0;text-align:center;font-size:clamp(5rem,16vw,12rem);pointer-events:none;text-shadow:0 0 20px var(--readable)}
-.thanks-slot{position:absolute;left:50%;top:52%;width:min(1280px,120vw);transform:translateX(-50%)}
+.thanks{position:relative;background:var(--paper);overflow:hidden}
+.thanks-top{position:relative;z-index:3;padding:clamp(48px,8vh,88px) clamp(18px,5vw,72px) 28px;max-width:1100px;margin:0 auto}
+.thanks-kicker{margin:0 0 18px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.thanks-copy{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 28px;padding-top:22px;border-top:1px solid var(--line-strong)}
+.thanks-copy h3{margin:0 0 8px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:650}
+.thanks-copy a{margin:0 0 6px;display:block;text-decoration:none;font-size:1rem;color:var(--ink)}
+.thanks-copy a:hover{text-decoration:underline;text-underline-offset:3px}
+.textbtn{background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--muted);font-size:.86rem}
+.thanks-close{position:relative;min-height:clamp(420px,62vh,720px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8vh 18px 28px;isolation:isolate}
+.thanks-close h2{position:relative;z-index:3;margin:0;text-align:center;font-size:clamp(4.2rem,14vw,10rem);line-height:.85;pointer-events:none;text-shadow:0 0 28px var(--readable)}
+.fine{position:relative;z-index:3;text-align:center;margin:14px 0 0;font-size:.8rem;color:var(--muted)}
+.thanks-slot{position:absolute;left:50%;bottom:-38%;width:min(980px,108vw);transform:translateX(-50%);z-index:1;
+  -webkit-mask-image:radial-gradient(ellipse 70% 62% at 50% 38%, #000 28%, rgba(0,0,0,.55) 58%, transparent 78%);
+  mask-image:radial-gradient(ellipse 70% 62% at 50% 38%, #000 28%, rgba(0,0,0,.55) 58%, transparent 78%);
+}
 .thanks-slot .disc{width:100%}
-.fine{position:relative;z-index:2;text-align:center;margin:18px 0 0;font-size:.8rem;color:var(--muted)}
+.thanks-slot .disc-shadow{opacity:.45}
+.thanks-glow{position:absolute;inset:18% 10% auto;height:55%;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 70%, color-mix(in srgb, var(--pink) 28%, transparent), transparent 70%);
+  filter:blur(8px);
+}
+.thanks-veil{position:absolute;inset:auto 0 0 0;height:34%;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg, transparent, color-mix(in srgb, var(--paper) 55%, transparent) 45%, var(--paper) 100%);
+}
 
 @media (max-width:980px){
   .about-layout{min-height:0}
@@ -301,6 +314,7 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
   .o3{right:0;top:38%}
   .specs{grid-template-columns:1fr 1fr}
   .thanks-copy{grid-template-columns:1fr 1fr}
+  .thanks-slot{bottom:-46%;width:min(820px,120vw)}
 }
 @media (max-width:700px){
   .nav-toggle{display:grid}
@@ -328,6 +342,8 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
   .disc-hint{display:none}
   .toc-title{position:static;transform:none;width:auto;text-align:left}
   .thanks-copy{grid-template-columns:1fr}
+  .thanks-close{min-height:380px;padding-bottom:22px}
+  .thanks-slot{bottom:-52%;width:140vw}
   .polaroid{width:180px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -485,40 +501,47 @@ html[data-theme="dark"] .disc-grooves{mix-blend-mode:soft-light;opacity:.75}
 </main>
 
 <section class="thanks" id="contact" aria-labelledby="thanks">
-  <div class="thanks-copy">
-    <div>
-      <h3>Email</h3>
-      <a href="mailto:yyueliang55@gmail.com">yyueliang55@gmail.com</a>
-      <button class="textbtn" id="copyEmail" type="button">copy</button>
-    </div>
-    <div>
-      <h3>Phone</h3>
-      <a href="tel:+6586614514">+65 8661 4514</a>
-    </div>
-    <div>
-      <h3>Elsewhere</h3>
-      <a href="https://www.linkedin.com/in/thawdarlinwai" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/yueliangg" target="_blank" rel="noopener">GitHub</a>
-    </div>
-    <div>
-      <h3>Résumé</h3>
-      <a href="resume/Thawdar_Lin_Wai_Data_Analyst_Resume.pdf" target="_blank" rel="noopener">Data Analyst</a>
-      <a href="resume/Thawdar_Lin_Wai_AI_Engineer_Resume.pdf" target="_blank" rel="noopener">AI Engineer</a>
-    </div>
-  </div>
-  <h2 class="script" id="thanks">Thank you</h2>
-  <p class="fine">© 2026 Yue Liang (Thawdar Lin Wai) · Singapore Polytechnic</p>
-  <div class="thanks-slot" aria-hidden="true">
-    <div class="disc" data-disc="thanks" data-idle="12">
-      <div class="disc-shadow"></div>
-      <div class="disc-body">
-        <canvas class="disc-grooves" width="800" height="800"></canvas>
-        <div class="disc-edge"></div>
-        <div class="disc-label"><b>THANK YOU</b><small>encore</small></div>
-        <div class="disc-hole"></div>
-        <div class="disc-specular"></div>
+  <div class="thanks-top">
+    <p class="thanks-kicker">03 / Contact</p>
+    <div class="thanks-copy">
+      <div>
+        <h3>Email</h3>
+        <a href="mailto:yyueliang55@gmail.com">yyueliang55@gmail.com</a>
+        <button class="textbtn" id="copyEmail" type="button">copy</button>
+      </div>
+      <div>
+        <h3>Phone</h3>
+        <a href="tel:+6586614514">+65 8661 4514</a>
+      </div>
+      <div>
+        <h3>Elsewhere</h3>
+        <a href="https://www.linkedin.com/in/thawdarlinwai" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/yueliangg" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div>
+        <h3>Résumé</h3>
+        <a href="resume/Thawdar_Lin_Wai_Data_Analyst_Resume.pdf" target="_blank" rel="noopener">Data Analyst</a>
+        <a href="resume/Thawdar_Lin_Wai_AI_Engineer_Resume.pdf" target="_blank" rel="noopener">AI Engineer</a>
       </div>
     </div>
+  </div>
+  <div class="thanks-close">
+    <div class="thanks-glow" aria-hidden="true"></div>
+    <h2 class="script" id="thanks">Thank you</h2>
+    <p class="fine">© 2026 Yue Liang (Thawdar Lin Wai) · Singapore Polytechnic</p>
+    <div class="thanks-slot" aria-hidden="true">
+      <div class="disc" data-disc="thanks" data-idle="8">
+        <div class="disc-shadow"></div>
+        <div class="disc-body">
+          <canvas class="disc-grooves" width="800" height="800"></canvas>
+          <div class="disc-edge"></div>
+          <div class="disc-label"><b>YL</b><small>encore</small></div>
+          <div class="disc-hole"></div>
+          <div class="disc-specular"></div>
+        </div>
+      </div>
+    </div>
+    <div class="thanks-veil" aria-hidden="true"></div>
   </div>
 </section>
 
