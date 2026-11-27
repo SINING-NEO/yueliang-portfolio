@@ -4,7 +4,7 @@ Personal portfolio website of Yue Liang (Thawdar Lin Wai), Year 2 Applied AI & A
 
 **Live site:** https://sining-neo.github.io/yueliang-portfolio/
 
-The earlier version lives at https://yueliangg.github.io/yueliang-portfolio/. This copy adds the JEN Singapore Tanglin work, competitive swimming, Java, a phone menu, and link-preview tags.
+The earlier version lives at https://yueliangg.github.io/yueliang-portfolio/. This one follows a long editorial sequence: cover, about, contents, then one case study per project.
 
 ## What's inside
 
